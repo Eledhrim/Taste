@@ -6,14 +6,15 @@ using System.Text;
 
 namespace Taste.DataAccess.Data.Repository.IRepository
 {
-    //<T> kullanarak generic hale getirdik
+    // With using <T> it become generic type and we defined that T is a class
+    // For instance Category
     public interface IRepository<T> where T : class
     {
         T Get(int id);
 
         IEnumerable<T> GetAll(
             Expression<Func<T,bool>> filter = null,
-            Func<IQueryable<T>, IOrderedQueryable<T>> orderby = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             string includeProperties=null
             );
 

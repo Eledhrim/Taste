@@ -5,18 +5,16 @@ using System.Text;
 
 namespace Taste.Models
 {
-    public class Category
+    public class FoodType
     {
         [Key]
         public int Id { get; set; }
 
         [Required]
-        [Display(Name="Category Name")]
+        [Display(Name="Food Type Name")]
         public string Name { get; set; }
 
-        [Required]
-        [Display(Name = "Display Order")]
-        public int DisplayOrder { get; set; }
+        
 
     }
 }
