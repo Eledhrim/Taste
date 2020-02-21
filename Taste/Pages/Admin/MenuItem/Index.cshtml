@@ -1,0 +1,39 @@
+﻿@page
+@{
+    ViewData["Title"] = "Index";
+}
+
+<style type="text/css">
+    #DT_load_wrapper label, #DT_load_info, #DT_load_paginate a {
+        color: #fff !important;
+    }
+</style>
+
+<div class="border container">
+    <div class="row">
+        <div class="col-6">
+            <h2 class="text-white">Menu Item List</h2>
+        </div>
+        <div class="col-6 text-right">
+            <a asp-page="Upsert" class="btn btn-primary"><i class="fas fa-plus">&nbsp;Create New</i></a>
+        </div>
+    </div>
+    <br /><br />
+    <table id="DT_load" class="table text-dark table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Category</th>
+                <th>Food Type</th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section Scripts{
+    <script src="~/js/menu-item.js"></script>
+}
+
+
