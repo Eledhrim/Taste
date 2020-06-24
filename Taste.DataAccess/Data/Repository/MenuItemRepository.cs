@@ -29,7 +29,7 @@ namespace Taste.DataAccess.Data.Repository
 
             if (menuItem.Image != null)
             {
-                objFromDb.Image = menuItem.Name;
+                objFromDb.Image = menuItem.Image;
             }
 
             _db.SaveChanges();

@@ -1,38 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Taste.DataAccess.Data.Repository.IRepository;
 using Taste.Models;
+using Taste.Models.ViewModels;
+using Taste.Utility;
 
 namespace Taste.Pages.Admin.MenuItem
 {
+    [Authorize(Roles = SD.ManagerRole)]
     public class UpsertModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public UpsertModel(IUnitOfWork unitOfWork)
+        public UpsertModel(IUnitOfWork unitOfWork, IWebHostEnvironment hostingEnvironment)
         {
             _unitOfWork = unitOfWork;
             _hostingEnvironment = hostingEnvironment;
         }
 
         [BindProperty]
-        public Taste.Models.MenuItem MenuItemObj { get; set; }
+        public MenuItemVM MenuItemObj { get; set; }
 
         public IActionResult OnGet(int? id)
         {
-            CategoryObj = new Taste.Models.Category();
+            MenuItemObj = new MenuItemVM
+            {
+                CategoryList = _unitOfWork.Category.GetCategoryListForDropDown(),
+                FoodTypeList = _unitOfWork.FoodType.GetFoodTypeListForDropDown(),
+                MenuItem = new Models.MenuItem()
+            };
 
             if (id != null)
             {
-                CategoryObj = _unitOfWork.Category.GetFirstOrDefault(u => u.Id == id);
+                MenuItemObj.MenuItem = _unitOfWork.MenuItem.GetFirstOrDefault(u => u.Id == id);
 
-                if (CategoryObj == null)
+                if (MenuItemObj.MenuItem == null)
                     return NotFound();
             }
 
@@ -41,18 +51,66 @@ namespace Taste.Pages.Admin.MenuItem
 
         public IActionResult OnPost()
         {
+            string webRootPath = _hostingEnvironment.WebRootPath;
+            var files = HttpContext.Request.Form.Files;
+
             if(!ModelState.IsValid)
             {
                 return Page();
             }
 
-            if(CategoryObj.Id==0)
+            if(MenuItemObj.MenuItem.Id==0)
             {
-                _unitOfWork.Category.Add(CategoryObj);
+                string fileName = Guid.NewGuid().ToString();
+
+                var uploads = Path.Combine(webRootPath, @"images\menuItems");
+                var extension = Path.GetExtension(files[0].FileName);
+
+                using (var fileStream = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+                {
+                    files[0].CopyTo(fileStream);
+                }
+
+                MenuItemObj.MenuItem.Image = @"\images\menuItems\" + fileName + extension;
+
+                _unitOfWork.MenuItem.Add(MenuItemObj.MenuItem);
             }
             else
             {
-                _unitOfWork.Category.Update(CategoryObj);
+                // Edit Menu Item
+
+                var objFromDb = _unitOfWork.MenuItem.Get(MenuItemObj.MenuItem.Id);
+
+                if (files.Count > 0)
+                {
+                    string fileName = Guid.NewGuid().ToString();
+
+                    var uploads = Path.Combine(webRootPath, @"images\menuItems");
+                    var extension = Path.GetExtension(files[0].FileName);
+
+                    // Delete existing file
+                    var imagePath = Path.Combine(webRootPath, objFromDb.Image.TrimStart('\\'));
+
+                    if(System.IO.File.Exists(imagePath))
+                    {
+                        System.IO.File.Delete(imagePath);
+                    }
+
+                    using (var fileStream = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+                    {
+                        files[0].CopyTo(fileStream);
+                    }
+
+                    MenuItemObj.MenuItem.Image = @"\images\menuItems\" + fileName + extension;
+
+                    
+                }
+                else
+                {
+                    MenuItemObj.MenuItem.Image = objFromDb.Image;
+                }
+
+                _unitOfWork.MenuItem.Update(MenuItemObj.MenuItem);
             }
 
             _unitOfWork.Save();
