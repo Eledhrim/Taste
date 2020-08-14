@@ -27,11 +27,11 @@ namespace Taste.Models
 
         [Required]
         [Display(Name = "Pick Up Time")]
-        public double PickUpTime { get; set; }
+        public DateTime PickUpTime { get; set; }
 
         [Required]
         [NotMapped] //Notmapped because on DB PickUpTime will consist PickUpDate. We use this for display purposes
-        public double PickUpDate { get; set; }
+        public DateTime PickUpDate { get; set; }
 
         public string Status { get; set; }
 
@@ -44,5 +44,7 @@ namespace Taste.Models
 
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
+
+        public string TransactionId { get; set; }
     }
 }

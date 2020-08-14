@@ -10,8 +10,8 @@ using Taste.DataAccess;
 namespace Taste.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200624101029_addOrderHeaderAndDetailsToDb")]
-    partial class addOrderHeaderAndDetailsToDb
+    [Migration("20200814145146_addedTransactionIdToOrderHeader")]
+    partial class addedTransactionIdToOrderHeader
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -352,10 +352,13 @@ namespace Taste.DataAccess.Migrations
                     b.Property<string>("PickUpName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("PickUpTime")
-                        .HasColumnType("float");
+                    b.Property<DateTime>("PickUpTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TransactionId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")

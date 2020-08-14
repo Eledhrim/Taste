@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Taste.DataAccess.Migrations
 {
-    public partial class addOrderHeaderAndDetailsToDb : Migration
+    public partial class orderHeaderAndDetailsAdded : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,7 +16,7 @@ namespace Taste.DataAccess.Migrations
                     UserId = table.Column<string>(nullable: false),
                     OrderDate = table.Column<DateTime>(nullable: false),
                     OrderTotal = table.Column<double>(nullable: false),
-                    PickUpTime = table.Column<double>(nullable: false),
+                    PickUpTime = table.Column<DateTime>(nullable: false),
                     Status = table.Column<string>(nullable: true),
                     PaymentStatus = table.Column<string>(nullable: true),
                     Comments = table.Column<string>(nullable: true),

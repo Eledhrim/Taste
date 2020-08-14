@@ -18,6 +18,9 @@ namespace Taste.DataAccess.Data.Repository
             ApplicationUser = new ApplicationUserRepository(_db);
 
             ShoppingCart = new ShoppingCartRepository(_db);
+
+            OrderHeader = new OrderHeaderRepository(_db);
+            OrderDetails = new OrderDetailsRepository(_db);
         }
 
         public ICategoryRepository Category { get; private set; }

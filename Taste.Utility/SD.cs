@@ -10,5 +10,16 @@ namespace Taste.Utility
         public const string CustomerRole = "Customer";
 
         public const string ShoppingCart = "Shopping Cart";
+
+        public const string StatusSubmitted = "Submitted";
+        public const string StatusInProcess = "Being Prepared";
+        public const string StatusReady = "Ready for Pickup";
+        public const string StatusCompleted = "Completed";
+        public const string StatusCancelled = "Cancelled";
+        public const string StatusRefunded = "Refunded";
+
+        public const string PaymentStatusPending = "Pending";
+        public const string PeymentStatusApproved = "Approved";
+        public const string PaymentStatusRejected = "Rejected";
     }
 }
