@@ -58,6 +58,17 @@ namespace Taste
                 .SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_3_0);
 
             services.AddRazorPages().AddRazorRuntimeCompilation();
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = "2479781348949121";
+                facebookOptions.AppSecret = "4aa44827c75b07c5d93c8d86eea1641d";
+            });
+
+            services.AddAuthentication().AddMicrosoftAccount(options =>
+            {
+                options.ClientId = "7c80e7ea-aa55-44cb-b3bf-309e4bb8cbea";
+                options.ClientSecret = "tPWy0~q1Jj42uL~a9.-J3_7eP83rOLLCTu";
+            });
 
             services.ConfigureApplicationCookie(options =>
             {
