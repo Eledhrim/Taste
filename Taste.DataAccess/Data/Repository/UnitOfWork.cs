@@ -21,6 +21,8 @@ namespace Taste.DataAccess.Data.Repository
 
             OrderHeader = new OrderHeaderRepository(_db);
             OrderDetails = new OrderDetailsRepository(_db);
+
+            SP_Call = new SP_Call(_db);
         }
 
         public ICategoryRepository Category { get; private set; }
@@ -36,6 +38,8 @@ namespace Taste.DataAccess.Data.Repository
         public IOrderHeaderRepository OrderHeader { get; set; }
 
         public IOrderDetailsRepository OrderDetails { get; set; }
+
+        public ISP_Call SP_Call { get; set; }
 
         public void Dispose()
         {

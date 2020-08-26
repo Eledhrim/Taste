@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Taste.DataAccess.Data.Repository.IRepository;
+using Taste.Models;
 using Taste.Utility;
 
 namespace Taste.Controllers
@@ -26,6 +27,8 @@ namespace Taste.Controllers
         public IActionResult Get()
         {
             return Json(new { data = _unitOfWork.Category.GetAll() });
+            //Stored Procedure Version
+            //return Json(new { data = _unitOfWork.SP_Call.ReturnList<Category>("usp_GetAllCategory", null) });
         }
 
         [HttpDelete("{id}")]

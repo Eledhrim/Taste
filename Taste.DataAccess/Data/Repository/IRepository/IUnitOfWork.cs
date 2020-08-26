@@ -20,6 +20,8 @@ namespace Taste.DataAccess.Data.Repository.IRepository
 
         IOrderDetailsRepository OrderDetails { get; }
 
+        ISP_Call SP_Call { get; }
+
         void Save();
     }
 }
