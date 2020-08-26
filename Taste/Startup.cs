@@ -17,6 +17,7 @@ using Taste.DataAccess.Data.Repository;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Taste.Utility;
 using Stripe;
+using Taste.DataAccess.Data.Initializer;
 
 namespace Taste
 {
@@ -39,11 +40,14 @@ namespace Taste
             // Because of we modified default identity, we do not user AddDefaultIdentity anymore
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddDefaultTokenProviders()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultUI();
 
             services.AddSingleton<IEmailSender, EmailSender>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddScoped<IDBInitializer, DBInitializer>();
 
             services.AddSession(options =>
             {
@@ -84,7 +88,7 @@ namespace Taste
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDBInitializer dBInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -101,6 +105,8 @@ namespace Taste
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSession();
+
+            dBInitializer.Initialize();
 
             app.UseRouting();
 
