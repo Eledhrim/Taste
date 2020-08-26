@@ -54,8 +54,13 @@ namespace Taste
 
             services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
 
-            services.AddMvc(options => options.EnableEndpointRouting = false)
-                .SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_3_0);
+            /*services.Configure<RequestLocalizationOptions>(options =>
+            {
+                options.DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("tr-TR");
+            });*/
+
+            /*services.AddMvc(options => options.EnableEndpointRouting = false)
+                .SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_3_0);*/
 
             services.AddRazorPages().AddRazorRuntimeCompilation();
             services.AddAuthentication().AddFacebook(facebookOptions =>
@@ -99,10 +104,17 @@ namespace Taste
 
             app.UseRouting();
 
+            //app.UseRequestLocalization();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseMvc();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapRazorPages();
+            });
+            //app.UseMvc();
 
             StripeConfiguration.ApiKey = Configuration.GetSection("Stripe")["SecretKey"];
 

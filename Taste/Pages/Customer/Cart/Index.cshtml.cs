@@ -27,7 +27,8 @@ namespace Taste.Pages.Customer.Cart
         {
             OrderDetailsCartVM = new OrderDetailsCart()
             {
-                OrderHeader = new Models.OrderHeader()
+                OrderHeader = new Models.OrderHeader(),
+                listCart = new List<ShoppingCart>()
             };
 
             OrderDetailsCartVM.OrderHeader.OrderTotal = 0;
@@ -35,18 +36,22 @@ namespace Taste.Pages.Customer.Cart
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            IEnumerable<ShoppingCart> cart = _unitOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == claim.Value);
-
-            if(cart!=null)
+            if (claim != null)
             {
-                OrderDetailsCartVM.listCart = cart.ToList();
-            }
 
-            foreach(var cartList in OrderDetailsCartVM.listCart)
-            {
-                cartList.MenuItem = _unitOfWork.MenuItem.GetFirstOrDefault(m => m.Id == cartList.MenuItemId);
+                IEnumerable<ShoppingCart> cart = _unitOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == claim.Value);
 
-                OrderDetailsCartVM.OrderHeader.OrderTotal += cartList.MenuItem.Price * cartList.Count;
+                if (cart != null)
+                {
+                    OrderDetailsCartVM.listCart = cart.ToList();
+                }
+
+                foreach (var cartList in OrderDetailsCartVM.listCart)
+                {
+                    cartList.MenuItem = _unitOfWork.MenuItem.GetFirstOrDefault(m => m.Id == cartList.MenuItemId);
+
+                    OrderDetailsCartVM.OrderHeader.OrderTotal += cartList.MenuItem.Price * cartList.Count;
+                }
             }
         }
 
